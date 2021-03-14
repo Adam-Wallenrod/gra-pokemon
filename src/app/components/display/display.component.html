@@ -1,10 +1,18 @@
-<input type="text" [(ngModel)]="pokemonName"/>
+<input
+  type="text"
+  (keydown.enter)="fetchPokemon()"
+  [(ngModel)]="pokemonName"/>
 
-<button (click)="onClick()">Wybierz</button>
+<button (click)="fetchPokemon()">Wybierz</button>
 
 <br/>
 
-<img src="{{pokemon?.sprites.front_default}}">
+<!--<img src="{{pokemon?.sprites.front_default}}">-->
 
 
-{{pokemonName}}
+
+<div *ngIf="pokemon">
+  <canvas id="game-arena" width="600" height="600"></canvas>
+</div>
+
+
