@@ -118,6 +118,7 @@ export class DisplayComponent implements OnInit {
   onPokemonLoad() {
     this.context.drawImage(this.pokemonSpirte, 0, 0);
     this.resetPokemonPosition();
+    this.addBorderForPokemon(0, 0);
     // this.pokemonWidth = this.pokemonSpirte.naturalWidth;
     // this.pokemonHeight = this.pokemonSpirte.naturalHeight;
     // console.log('this.pokemonWidth: ', this.pokemonWidth);
@@ -142,6 +143,7 @@ export class DisplayComponent implements OnInit {
 
     console.log('%c xPos: ', 'color: blue', this.xPos);
     this.context.drawImage(this.pokemonSpirte, this.xPos, this.yPos);
+    this.addBorderForPokemon(this.xPos, this.yPos);
   }
 
   movePokemonYPos(value: number) {
@@ -155,7 +157,13 @@ export class DisplayComponent implements OnInit {
 
     console.log('%c yPos: ', 'color: blue', this.yPos);
     this.context.drawImage(this.pokemonSpirte, this.xPos, this.yPos);
+    this.addBorderForPokemon(this.xPos, this.yPos);
   }
 
+
+  addBorderForPokemon(xPos: number, yPos: number) {
+    this.context.strokeStyle = 'green';
+    this.context.strokeRect(xPos, yPos, this.pokemonWidth, this.pokemonHeight);
+  }
 
 }
