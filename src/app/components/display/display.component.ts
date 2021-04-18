@@ -82,12 +82,18 @@ export class DisplayComponent implements OnInit {
 
 
   async fetchPokemon() {
-    this.pokemon = await this.pokedex.getPokemonByName(this.pokemonName.toLowerCase());
-    console.log('pokemon: ', this.pokemon);
 
-    setTimeout(() => {
-      this.placePokemonOnCanvas();
-    });
+    try {
+      this.pokemon = await this.pokedex.getPokemonByName(this.pokemonName.toLowerCase());
+      console.log('pokemon: ', this.pokemon);
+
+      setTimeout(() => {
+        this.placePokemonOnCanvas();
+      });
+    } catch (e) {
+      console.log('Error happened while fetching Pokemon: ', e);
+    }
+
 
   }
 

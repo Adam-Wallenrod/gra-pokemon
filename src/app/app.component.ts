@@ -11,17 +11,21 @@ export class AppComponent implements OnInit {
   pokedex = new pokedex();
 
 
-
-
   ngOnInit() {
     console.log('pokedex: ', this.pokedex);
+    let allPokemons: any[];
 
-    let myPokemon = this.pokedex.getPokemonByName('charmander').then(
-      value => {
-        console.log('value: ', value);
-      }
+    const interval = {
+      limit : 150,
+      offset: 0
+    }
 
-    );
+
+    this.pokedex.getPokemonsList(interval).then((response) => {
+
+      allPokemons = response;
+      console.log(allPokemons.map(pokemon => pokemon.name));
+    });
 
   }
 
