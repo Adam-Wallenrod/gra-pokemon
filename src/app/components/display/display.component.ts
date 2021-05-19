@@ -17,8 +17,8 @@ enum Cursors {
 })
 export class DisplayComponent implements OnInit {
 
-  readonly canvasWidth = 600;
-  readonly canvasHeight = 600;
+  readonly canvasWidth = 768;
+  readonly canvasHeight = 768;
 
   pokedex = new pokedex();
   pokemonName: string;
@@ -139,31 +139,41 @@ export class DisplayComponent implements OnInit {
 
 
   async movePokemonXPos(value: number) {
-    this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
+    // this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.xPos = this.xPos + value;
 
     if (this.xPos > this.canvasWidth - this.pokemonWidth) {
       this.xPos = this.canvasWidth - this.pokemonWidth;
-      await this.makeXScrollEffect();
+
+      this.makeXScrollEffect();
+      return null;
+
     } else if (this.xPos < 0) {
       this.xPos = 0;
     }
 
-    // console.log('%c xPos: ', 'color: blue', this.xPos);
-    this.context.drawImage(this.pokemonSpirte, this.xPos, this.yPos);
-    this.addBorderForPokemon(this.xPos, this.yPos);
+    this.drawPokemon();
   }
 
   movePokemonYPos(value: number) {
-    this.context.clearRect(0, 0, 600, 600);
     this.yPos = this.yPos + value;
     if (this.yPos > this.canvasHeight - this.pokemonHeight) {
       this.yPos = this.canvasHeight - this.pokemonHeight;
+
+      this.makeYScrollEffect();
+      return null;
+
     } else if (this.yPos < 0) {
       this.yPos = 0;
     }
 
-    // console.log('%c yPos: ', 'color: blue', this.yPos);
+
+    this.drawPokemon();
+  }
+
+
+  drawPokemon() {
+    this.context.clearRect(0, 0, this.canvasWidth, this.canvasHeight);
     this.context.drawImage(this.pokemonSpirte, this.xPos, this.yPos);
     this.addBorderForPokemon(this.xPos, this.yPos);
   }
@@ -176,26 +186,58 @@ export class DisplayComponent implements OnInit {
 
 
   async makeXScrollEffect() {
-    const promiseArray = [];
     const counter: number = Math.floor(this.canvasWidth / this.pokemonWidth);
-
-
-    for (let i = counter; i > 0; i--) {
-      promiseArray.push(this.makeDelay(300));
-    }
-
-    await Promise.all(promiseArray);
+    this.makeXPosChangeWithDelay(counter);
   }
 
 
-  makeDelay(millis: number) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.xPos = this.xPos - this.pokemonWidth;
-        resolve();
-      }, millis);
-    });
+  makeXPosChangeWithDelay(i: number) {
+    setTimeout(() => {
+      this.xPos = this.xPos - this.pokemonWidth;
+
+      if (this.xPos < this.pokemonWidth) {
+        this.xPos = 0;
+      }
+
+      this.drawPokemon();
+      console.log('x: ', this.xPos);
+
+      i--;
+      if (i > 1) {
+        this.makeXPosChangeWithDelay(i);
+      }
+
+    }, 25);
+
   }
+
+  makeYScrollEffect() {
+    const counter: number = Math.floor(this.canvasHeight / this.pokemonHeight);
+    this.makeYPosChangeWithDelay(counter);
+  }
+
+
+
+  makeYPosChangeWithDelay(i: number) {
+    setTimeout(() => {
+      this.yPos = this.yPos - this.pokemonHeight;
+
+      if (this.yPos < this.pokemonHeight) {
+        this.yPos = 0;
+      }
+
+      this.drawPokemon();
+
+
+      i--;
+      if (i > 1) {
+        this.makeYPosChangeWithDelay(i);
+      }
+
+    }, 25);
+
+  }
+
 
 
 }
