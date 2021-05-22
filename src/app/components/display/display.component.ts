@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnInit} from '@angular/core';
 import * as pokedex from 'pokedex-promise-v2';
 import set = Reflect.set;
 
@@ -44,7 +44,7 @@ export class DisplayComponent implements OnInit {
   }
 
 
-  constructor() {
+  constructor(private elementRef: ElementRef) {
   }
 
 
@@ -239,5 +239,31 @@ export class DisplayComponent implements OnInit {
   }
 
 
+
+  animateElement() {
+
+    const squareElm = this.elementRef.nativeElement.querySelector('#square');
+    console.log('elementToAnimate: ', squareElm);
+
+
+    let start;
+
+    function step(timestamp) {
+      if (start === undefined) {
+        start = timestamp;
+        console.log('timestamp: ', timestamp);
+      }
+      const elapsed = timestamp - start;
+
+      // `Math.min()` is used here to make sure that the element stops at exactly 200px.
+      squareElm.style.transform = 'translateX(' + Math.min(0.1 * elapsed, 200) + 'px)';
+
+      if (elapsed < 2000) { // Stop the animation after 2 seconds
+        window.requestAnimationFrame(step);
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  }
 
 }
